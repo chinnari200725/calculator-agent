@@ -1,9 +1,45 @@
+temperature_readings = [80, 76, 72]
+goal_temperature = 72
+reading_index = 0
+
+
+def observe():
+    global reading_index
+    if reading_index >= len(temperature_readings):
+        return None
+    temperature = temperature_readings[reading_index]
+    reading_index += 1
+    return temperature
+
+
+def decide(observation):
+    if observation == goal_temperature:
+        return "success"
+    if observation > goal_temperature:
+        return "cool"
+    return "heat"
+
+
+def act(decision):
+    print(f"Action: {decision}")
+
+
 def agent_loop():
     max_iterations = 10
-    for i in range(max_iters):
+    for iteration_number in range(max_iterations):
         observation = observe()
+        if observation is None:
+            print("No more temperature readings.")
+            return "failure"
+        print(f"Temperature: {observation}F")
         decision = decide(observation)
-        if decision == "sucess":
-            return "sucess"
+        if decision == "success":
+            print("Goal reached.")
+            return "success"
         act(decision)
-        return "failure"
+    print("Safety limit reached.")
+    return "failure"
+
+
+if __name__ == "__main__":
+    agent_loop()
